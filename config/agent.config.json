@@ -1,0 +1,21 @@
+{
+  "baseUrl": "https://example.com",
+  "environment": "dev",
+  "timeouts": {
+    "navigation": 20000,
+    "element": 8000,
+    "assertion": 5000
+  },
+  "maxSelfHealAttempts": 2,
+  "enableSelfHealing": true,
+  "enableManualLoginPause": true,
+  "enableFailureAnalysis": true,
+  "captureScreenshots": "onFailure",
+  "novaLite": {
+    "region": "us-east-1",
+    "modelId": "amazon.nova-lite-v1:0",
+    "maxTokens": 512,
+    "temperature": 0.2,
+    "topP": 0.9
+  }
+}
