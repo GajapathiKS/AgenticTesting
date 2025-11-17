@@ -1,0 +1,14 @@
+{
+  "baseUrl": "https://example.com",
+  "environment": "dev",
+  "timeouts": {
+    "navigation": 20000,
+    "element": 8000,
+    "assertion": 5000
+  },
+  "maxSelfHealAttempts": 2,
+  "enableSelfHealing": true,
+  "enableManualLoginPause": true,
+  "enableFailureAnalysis": true,
+  "captureScreenshots": "onFailure"
+}
