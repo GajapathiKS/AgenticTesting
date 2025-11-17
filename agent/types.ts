@@ -71,8 +71,17 @@ export interface AgentConfig {
   enableManualLoginPause: boolean;
   enableFailureAnalysis: boolean;
   captureScreenshots: 'onFailure' | 'onStep' | 'none';
+  novaLite?: NovaLiteSettings;
 }
 
 export interface Reporter {
   write(summary: RunSummary[], config: AgentConfig): Promise<void>;
+}
+
+export interface NovaLiteSettings {
+  region?: string;
+  modelId?: string;
+  maxTokens?: number;
+  temperature?: number;
+  topP?: number;
 }

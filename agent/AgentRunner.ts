@@ -8,25 +8,34 @@ import { LocatorStrategy } from '../locators/LocatorStrategy.js';
 import { SelfHealingLocator } from '../locators/SelfHealingLocator.js';
 import { StepExecutor } from './StepExecutor.js';
 import { FailureAnalyzer } from '../analysis/FailureAnalyzer.js';
+import { FailureLLMClient } from '../analysis/FailureLLMClient.js';
 import { HtmlReporter } from '../reporting/HtmlReporter.js';
 import { JsonReporter } from '../reporting/JsonReporter.js';
 import { MarkdownReporter } from '../reporting/MarkdownReporter.js';
 import { HealingInsightsReporter } from '../reporting/HealingInsightsReporter.js';
+import { NovaLiteClient } from '../llm/NovaLiteClient.js';
+import { NovaLiteThinker } from './NovaLiteThinker.js';
 
 export class AgentRunner {
   private readonly parser = new TestParser();
   private readonly planner = new TestPlanner();
   private readonly client = new PlaywrightMcpClient();
   private readonly selfHealingLocator = new SelfHealingLocator(new LocatorStrategy());
-  private readonly failureAnalyzer = new FailureAnalyzer();
+  private readonly novaLiteClient: NovaLiteClient;
+  private readonly failureAnalyzer: FailureAnalyzer;
   private readonly stepExecutor: StepExecutor;
   private readonly reporters: Reporter[];
 
   constructor(private readonly config: AgentConfig, reporters?: Reporter[]) {
+    this.novaLiteClient = new NovaLiteClient(this.config.novaLite);
+    const thinker = new NovaLiteThinker(this.novaLiteClient);
+    const failureClient = new FailureLLMClient(this.novaLiteClient);
+    this.failureAnalyzer = new FailureAnalyzer(failureClient);
     this.stepExecutor = new StepExecutor({
       client: this.client,
       config: this.config,
-      selfHealingLocator: this.selfHealingLocator
+      selfHealingLocator: this.selfHealingLocator,
+      thinker
     });
 
     this.reporters = reporters ?? [
